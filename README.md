@@ -1,7 +1,8 @@
 # JNUC1067
 
 **API Resources**
-Full resources here developer.jamf.com
+
+Full resources here https://developer.jamf.com
 
 Bearer Token Authorization recipes https://developer.jamf.com/jamf-pro/recipes/bearer-token-authorization
 
