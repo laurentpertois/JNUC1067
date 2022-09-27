@@ -82,9 +82,12 @@ $CombineCreds = "$($Username):$($Password)"
 $EncodeCreds = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($CombineCreds))
 $BasicAuthValue = "Basic $EncodeCreds"
 
+# Call to Jamf Pro in order to save the cookies so that future connections in the script use
+# the same Jamf Pro node in the cluster
+$null = Invoke-WebRequest -UseBasicParsing @getJamfVersionParams -SessionVariable TestSession
 
 # Use either a token or basic authentication depending on Jamf Pro version
-$JamfProVersion = ((Invoke-RestMethod $JssUrl/JSSCheckConnection).Split(".")[0,1]) -join ''
+$JamfProVersion = ((Invoke-RestMethod $JssUrl/JSSCheckConnection -WebSession $TestSession).Split(".")[0,1]) -join ''
 
 If ( $JamfProVersion -lt 1035) {
 
@@ -103,7 +106,7 @@ If ( $JamfProVersion -lt 1035) {
     }
 
     # Extract token
-    $TokenResult = Invoke-RestMethod @TokenParams
+    $TokenResult = Invoke-RestMethod @TokenParams -WebSession $TestSession
     $Token = $TokenResult.token
     $AuthValue = "Bearer $Token"
 
@@ -126,7 +129,7 @@ $UsersApiAccessParams = @{
 }
 
 # Let's talk to Jamf Pro
-$JamfProUsers = Invoke-RestMethod @UsersApiAccessParams | ConvertTo-Json
+$JamfProUsers = Invoke-RestMethod @UsersApiAccessParams -WebSession $TestSession | ConvertTo-Json
 
 # Create PSObject to store informations
 $FullListOfItems = @()
@@ -151,7 +154,7 @@ ForEach($User in $TableList.userPrincipalName_){
         }
     
         # Let's talk to Jamf Pro
-        $AllItems = Invoke-RestMethod @ItemApiAccessParams
+        $AllItems = Invoke-RestMethod @ItemApiAccessParams -WebSession $TestSession
     
         # Get all mobile devices
         $GetAllItems = $AllItems.user.links.mobile_devices.mobile_device
@@ -206,7 +209,7 @@ ForEach($Item in $FullListOfItems) {
     }
 
     # Let's talk to Jamf Pro
-    $ResultCommand = Invoke-RestMethod @ItemApiAccessParamsDevice
+    $ResultCommand = Invoke-RestMethod @ItemApiAccessParamsDevice -WebSession $TestSession
 
     # Show the user name
     $UserPrincipalName
