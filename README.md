@@ -2,7 +2,13 @@
 
 Welcome to JNUC 2022 Session JNUC1067!
 
-Here you will find links to many useful resources, scripts mentioned in the sessions and a [Wiki Page](https://github.com/laurentpertois/JNUC1067/wiki) with step by step instructions to setup what has been demoed.
+Here you will find links to many useful resources, scripts mentioned in the sessions and instructions.
+
+## Instructions
+
+You can find step by step instructions to setup what has been demoed on the [Wiki Page](https://github.com/laurentpertois/JNUC1067/wiki)
+
+## Links
 
 **API Resources**
 
